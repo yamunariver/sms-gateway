@@ -220,3 +220,44 @@ Replace `mysql-server` with the correct package name of the missing dependency.
 Please note that the exact dependencies needed for Kannel may vary depending on your specific setup and configuration. It's recommended to refer to the Kannel documentation for a comprehensive list of dependencies required for your use case.
 
 Remember that Kannel's dependencies can include libraries, development tools, database servers, web servers, and more, depending on how you plan to use Kannel. Always consult the official Kannel documentation and guidelines for accurate dependency information.
+
+
+#Mstep
+
+The error message you provided indicates a "Permission denied" error when Kannel is trying to open the AT2 device `/dev/ttyACM0`. This usually means that the user running the Kannel service does not have the necessary permissions to access the device. Here's how you can troubleshoot and resolve this issue:
+
+1. **Check User Permissions:**
+   First, verify which user is running the Kannel service. You can find this information in your Kannel configuration or by checking the process running Kannel (e.g., `ps aux | grep kannel`). Once you know the user, ensure that this user has the appropriate permissions to access `/dev/ttyACM0`.
+
+2. **Grant Permissions:**
+   You can grant permissions to the user by adding them to the relevant group that has access to the device. On many systems, the group is typically `dialout` or `tty`. Use the `usermod` command to add the user to the group:
+
+   ```bash
+   sudo usermod -aG dialout <username>
+   ```
+
+   Replace `<username>` with the actual username of the user running the Kannel service.
+
+3. **Restart Kannel:**
+   After adding the user to the group, restart the Kannel service for the changes to take effect:
+
+   ```bash
+   sudo systemctl restart kannel
+   ```
+
+4. **Check Device Ownership:**
+   Verify that the ownership and permissions of the device file are set correctly. Use the `ls -l` command to see the current ownership and permissions:
+
+   ```bash
+   ls -l /dev/ttyACM0
+   ```
+
+   The device should ideally be owned by the same user/group that Kannel is running as, or at least have read/write permissions for that user/group.
+
+5. **udev Rules (Optional):**
+   Sometimes, you might need to set up udev rules to ensure consistent permissions for devices. This step is more advanced and involves creating or modifying a udev rule for the specific device.
+
+6. **Test the Device:**
+   Before restarting Kannel, you might want to ensure that the user can access the device directly. Try to read from or write to the device using terminal commands (e.g., `echo "AT" > /dev/ttyACM0`) to make sure permissions are correctly set.
+
+Remember, changing permissions on system devices should be done with caution, as it affects security. Always grant the minimum necessary permissions to ensure the system's safety.
