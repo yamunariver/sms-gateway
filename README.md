@@ -175,3 +175,48 @@ Search Kannel's official documentation and online forums for solutions to common
 Use debug mode (`-dddddddd`) while starting Kannel to get detailed debugging information, which can help identify the root cause of the problem.
 
 Remember that troubleshooting can be a step-by-step process. Start by verifying basic elements like service status and configuration, and gradually narrow down the potential issues. If you're unable to resolve a problem, consulting the Kannel community or seeking professional support might be necessary.
+
+
+
+#Dcheck
+
+To check for dependencies on Ubuntu 20.04, you can use the `dpkg` command to query the package management system. This will help you determine if the necessary packages are installed. Here's how you can check for dependencies:
+
+**1. Open a Terminal:**
+Press `Ctrl` + `Alt` + `T` to open a terminal window.
+
+**2. Check for Dependencies:**
+Use the `dpkg` command with the `-l` flag to list all installed packages. You can then pipe the output to `grep` to search for specific packages. For example, to check if MySQL is installed:
+
+```bash
+dpkg -l | grep mysql
+```
+
+Similarly, you can check for other dependencies like PHP, Apache, and any other packages that Kannel may rely on.
+
+**3. Check for Specific Package:**
+If you want to check for a specific package, you can use the `dpkg -l` command followed by the package name. For example, to check if PHP is installed:
+
+```bash
+dpkg -l php
+```
+
+**4. Check Installed Libraries:**
+Many dependencies are provided through libraries. To check if a specific library is installed, you can use the `dpkg -l` command along with the library name. For example, to check if libxml2 is installed:
+
+```bash
+dpkg -l libxml2
+```
+
+**5. Install Missing Dependencies:**
+If you find that certain dependencies are missing, you can use the `sudo apt install` command to install them. For example, to install MySQL if it's missing:
+
+```bash
+sudo apt install mysql-server
+```
+
+Replace `mysql-server` with the correct package name of the missing dependency.
+
+Please note that the exact dependencies needed for Kannel may vary depending on your specific setup and configuration. It's recommended to refer to the Kannel documentation for a comprehensive list of dependencies required for your use case.
+
+Remember that Kannel's dependencies can include libraries, development tools, database servers, web servers, and more, depending on how you plan to use Kannel. Always consult the official Kannel documentation and guidelines for accurate dependency information.
